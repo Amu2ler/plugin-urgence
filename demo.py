@@ -1,4 +1,4 @@
-"""Script de démo : orchestration des 7 skills du plugin sur un scénario d'urgence.
+"""Script de démo : orchestration des 9 skills du plugin sur un scénario d'urgence.
 
 Scénario : "Incendie signalé au 29 rue de Strasbourg, 44000 Nantes."
 L'agent doit construire un contexte décisionnel complet.
@@ -54,7 +54,7 @@ def _short_json(obj, max_keys: int = 5) -> str:
 def run_scenario(address: str) -> None:
     print(f"\nScénario : situation d'urgence à l'adresse")
     print(f"  >>> {address}")
-    print("\nL'agent enchaîne les 7 skills du plugin pour construire le contexte.")
+    print("\nL'agent enchaîne les 9 skills du plugin pour construire le contexte.")
 
     # 1. Géocodage
     _print_section("1. fr-geocode — Localiser l'adresse")
@@ -130,8 +130,44 @@ def run_scenario(address: str) -> None:
         print(f"  Pollen dominant : {h['pollen']['dominant']} ({h['pollen']['level']})")
         print(f"  NIVEAU GLOBAL   : {h['overall_level'].upper()}")
 
-    # 7. Itinéraires vers les 3 hôpitaux les plus proches
-    _print_section("7. fr-route — Itinéraires vers les 3 hôpitaux les plus proches")
+    # 7. Profil de risque (Géorisques)
+    _print_section("7. fr-georisques — Profil de risque historique")
+    georisques = _load_module("fr-georisques", "georisques.py")
+    risks = _safe("fr-georisques", georisques.build_report, citycode, 5, 3)
+    if risks:
+        recenses = risks.get("risques_recenses", [])
+        print(f"  Risques recensés : {len(recenses)} types")
+        top_categories = [r["label"] for r in recenses[:5]]
+        for label in top_categories:
+            print(f"    - {label}")
+        catnat = risks.get("catnat", {})
+        print(f"  Arrêtés CatNat (historique) : {catnat.get('total', 0)}")
+        icpe = risks.get("icpe", {})
+        print(f"  Installations classées (ICPE) : {icpe.get('total', 0)}")
+        radon = risks.get("radon", {})
+        print(f"  Radon : classe {radon.get('classe_potentiel')} ({radon.get('label')})")
+        dicrim = risks.get("dicrim", {})
+        print(f"  DICRIM publié : {dicrim.get('publie')} (année {dicrim.get('annee_publication') or '—'})")
+
+    # 8. Cours d'eau (Vigicrues / Hub'Eau)
+    _print_section("8. fr-vigicrues — Niveaux des cours d'eau temps réel")
+    vigicrues = _load_module("fr-vigicrues", "vigicrues.py")
+    crues = _safe("fr-vigicrues", vigicrues.build_report, lat, lon, 15, 5)
+    if crues:
+        stations = crues.get("stations", [])
+        if stations:
+            for s in stations[:3]:
+                h_m = s.get("latest_height_m")
+                trend = s.get("trend_24h", "—")
+                delta = s.get("delta_24h_m")
+                delta_s = f" ({delta:+.2f} m)" if delta is not None else ""
+                h_s = f"{h_m} m" if h_m is not None else "—"
+                print(f"    - {s.get('libelle', '—'):60s}  {h_s:>10s}  tendance: {trend}{delta_s}")
+        else:
+            print("    Aucune station de mesure dans le rayon analysé.")
+
+    # 9. Itinéraires vers les 3 hôpitaux les plus proches
+    _print_section("9. fr-route — Itinéraires vers les 3 hôpitaux les plus proches")
     route = _load_module("fr-route", "route.py")
     hospitals = [x for x in (infra or {}).get("results", {}).get("health", []) if x["kind"] == "hospital"][:3]
     if hospitals:
@@ -162,6 +198,14 @@ def run_scenario(address: str) -> None:
         print(f"  Météo           : {wx['overall_level']}")
     if h:
         print(f"  Sanitaire       : {h['overall_level']}")
+    if risks:
+        print(f"  Risques majeurs : {len(risks.get('risques_recenses', []))} recensés, {risks.get('catnat', {}).get('total', 0)} CatNat historiques")
+    if crues and crues.get("stations"):
+        rising = sum(1 for s in crues["stations"] if s.get("trend_24h") == "rising")
+        if rising:
+            print(f"  Hydrologie      : ⚠ {rising} station(s) en hausse sur 24 h")
+        else:
+            print(f"  Hydrologie      : {len(crues['stations'])} station(s) suivies, pas de hausse")
     print()
 
 
