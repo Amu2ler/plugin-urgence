@@ -1,0 +1,20 @@
+{
+  "name": "plugin-urgence-fr",
+  "version": "0.1.0",
+  "description": "Plugin Claude Code d'aide à la décision en situation d'urgence en France : localisation, caractérisation de zones, alertes sanitaires et météo.",
+  "author": {
+    "name": "Arthur Muller"
+  },
+  "homepage": "https://github.com/Amu2ler/plugin-urgence",
+  "license": "MIT",
+  "keywords": [
+    "emergency",
+    "urgence",
+    "france",
+    "geocoding",
+    "weather",
+    "health",
+    "openstreetmap",
+    "insee"
+  ]
+}
