@@ -1,7 +1,7 @@
 {
   "name": "plugin-urgence-fr",
-  "version": "0.1.0",
-  "description": "Plugin Claude Code d'aide à la décision en situation d'urgence en France : localisation, caractérisation de zones, alertes sanitaires et météo.",
+  "version": "0.2.0",
+  "description": "Plugin Claude Code d'aide à la décision en situation d'urgence en France : localisation, caractérisation de zones, alertes sanitaires, météo, hydrologie et risques majeurs. 9 skills, 1 slash command /urgence, 1 sub-agent urgentiste.",
   "author": {
     "name": "Arthur Muller"
   },
@@ -15,6 +15,9 @@
     "weather",
     "health",
     "openstreetmap",
-    "insee"
+    "insee",
+    "georisques",
+    "vigicrues",
+    "routing"
   ]
 }
