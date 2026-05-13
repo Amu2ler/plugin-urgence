@@ -16,11 +16,16 @@ import argparse
 import json
 import math
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.openstreetmap.fr/api/interpreter",
+]
 GEO_API_BASE = "https://geo.api.gouv.fr"
 TIMEOUT_S = 60
 
@@ -51,13 +56,25 @@ def _http_get_json(url: str) -> dict | list:
 
 def _overpass_query(query: str) -> dict:
     data = urllib.parse.urlencode({"data": query}).encode("utf-8")
-    req = urllib.request.Request(
-        OVERPASS_URL,
-        data=data,
-        headers={"User-Agent": "plugin-urgence-fr/0.1"},
-    )
-    with urllib.request.urlopen(req, timeout=TIMEOUT_S + 10) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    last_err: Exception | None = None
+    for url in OVERPASS_URLS:
+        for attempt in range(2):
+            try:
+                req = urllib.request.Request(
+                    url, data=data, headers={"User-Agent": "plugin-urgence-fr/0.1"}
+                )
+                with urllib.request.urlopen(req, timeout=TIMEOUT_S + 10) as resp:
+                    return json.loads(resp.read().decode("utf-8"))
+            except urllib.error.HTTPError as e:
+                last_err = e
+                if e.code in (429, 502, 503, 504) and attempt == 0:
+                    time.sleep(2)
+                    continue
+                break
+            except (urllib.error.URLError, TimeoutError) as e:
+                last_err = e
+                break
+    raise last_err if last_err else RuntimeError("Overpass: tous les miroirs ont échoué")
 
 
 def _element_coords(element: dict) -> tuple[float | None, float | None]:
