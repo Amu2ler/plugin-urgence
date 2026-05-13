@@ -2,7 +2,7 @@
 
 **Plugin Claude Code d'aide à la décision en situation d'urgence en France.**
 
-L'agent dispose de 6 skills qu'il active à la demande pour répondre à trois besoins opérationnels :
+L'agent dispose de 7 skills qu'il active à la demande pour répondre à trois besoins opérationnels :
 
 1. **Localiser** un site, des routes, des accès à l'eau, des bâtiments.
 2. **Caractériser** une zone (population, vulnérabilités, équipements sensibles).
@@ -20,6 +20,7 @@ Les skills sont composables : ils s'appellent les uns les autres (via leurs sort
 | [`fr-characterize-zone`](skills/fr-characterize-zone/SKILL.md) | Population, densité, équipements sensibles (EHPAD, écoles) | [geo.api.gouv.fr](https://geo.api.gouv.fr) + Overpass |
 | [`fr-weather-alerts`](skills/fr-weather-alerts/SKILL.md) | Prévisions + niveau d'alerte vent/pluie/neige/chaud/froid | [Open-Meteo](https://open-meteo.com) + [Vigilance MF](https://vigilance.meteofrance.fr) |
 | [`fr-health-alerts`](skills/fr-health-alerts/SKILL.md) | AQI européen, polluants, 6 pollens | [Open-Meteo Air Quality](https://open-meteo.com/en/docs/air-quality-api) |
+| [`fr-route`](skills/fr-route/SKILL.md) | Itinéraires routiers et comparaison de destinations | [OSRM](https://project-osrm.org/) |
 
 Toutes les sources sont **publiques et gratuites**, sans clé API requise.
 
@@ -45,6 +46,7 @@ Voir la [documentation Claude Code – plugins](https://docs.claude.com/en/docs/
   - `hubeau.eaufrance.fr`
   - `api.open-meteo.com`
   - `air-quality-api.open-meteo.com`
+  - `router.project-osrm.org`
 
 ## Exemples d'utilisation (en CLI direct)
 
@@ -63,7 +65,22 @@ python skills/fr-weather-alerts/weather_alerts.py 47.218 -1.553 --days 3
 
 # Qualité de l'air et pollens
 python skills/fr-health-alerts/health_alerts.py 47.218 -1.553
+
+# Comparer 3 destinations par temps de trajet
+python skills/fr-route/route.py routes 47.2187 -1.5537 \
+  "47.2104,-1.5534,Hotel Dieu" "47.2272,-1.5615,Clinique du Parc"
 ```
+
+## Démo end-to-end
+
+Un script `demo.py` à la racine du repo orchestre les 7 skills sur un scénario d'urgence :
+
+```bash
+python demo.py                                       # scénario par défaut (Nantes)
+python demo.py --address "1 rue de Rivoli, 75001 Paris"
+```
+
+Il enchaîne géocodage → infrastructures → caractérisation → eau → météo → santé → itinéraires, puis affiche une synthèse décisionnelle (lieu, secours/hôpital le plus proche, score de vulnérabilité, niveaux d'alerte, hôpitaux classés par temps de trajet).
 
 ## Scénario type (orchestration par l'agent)
 
@@ -77,8 +94,9 @@ L'agent enchaîne :
 4. `fr-water-access` (OSM + Hub'Eau 44109) → 19 fontaines / canal Saint-Félix / Erdre à 715 m ; eau distribuée conforme
 5. `fr-weather-alerts` → rafales 58 km/h (jaune) : aggravation possible si vent tourne
 6. `fr-health-alerts` → AQI 38 (green) ; surveiller PM2.5 si feu intense
+7. `fr-route` → trois hôpitaux candidats classés par durée de trajet (Hôtel Dieu 4 min, Le Tourville 4 min, …)
 
-L'agent synthétise et propose une décision (évacuation EHPAD le plus proche, ressources hydrauliques à 700 m, etc.).
+L'agent synthétise et propose une décision (évacuation EHPAD le plus proche, ressources hydrauliques à 700 m, hôpital de destination optimal, etc.).
 
 ## Architecture
 

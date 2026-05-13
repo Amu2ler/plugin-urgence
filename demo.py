@@ -1,4 +1,4 @@
-"""Script de démo : orchestration des 6 skills du plugin sur un scénario d'urgence.
+"""Script de démo : orchestration des 7 skills du plugin sur un scénario d'urgence.
 
 Scénario : "Incendie signalé au 29 rue de Strasbourg, 44000 Nantes."
 L'agent doit construire un contexte décisionnel complet.
@@ -45,7 +45,7 @@ def _short_json(obj, max_keys: int = 5) -> str:
 def run_scenario(address: str) -> None:
     print(f"\nScénario : situation d'urgence à l'adresse")
     print(f"  >>> {address}")
-    print("\nL'agent enchaîne les 6 skills du plugin pour construire le contexte.")
+    print("\nL'agent enchaîne les 7 skills du plugin pour construire le contexte.")
 
     # 1. Géocodage
     _print_section("1. fr-geocode — Localiser l'adresse")
@@ -113,6 +113,21 @@ def run_scenario(address: str) -> None:
     print(f"  PM10  : {h['air_quality']['pollutants']['pm10_ug_m3']} µg/m³")
     print(f"  Pollen dominant : {h['pollen']['dominant']} ({h['pollen']['level']})")
     print(f"  NIVEAU GLOBAL   : {h['overall_level'].upper()}")
+
+    # 7. Itinéraires vers les 3 hôpitaux les plus proches
+    _print_section("7. fr-route — Itinéraires vers les 3 hôpitaux les plus proches")
+    route = _load_module("fr-route", "route.py")
+    hospitals = [x for x in infra["results"]["health"] if x["kind"] == "hospital"][:3]
+    if hospitals:
+        destinations = [{"lat": h["lat"], "lon": h["lon"], "label": h["name"] or "(sans nom)"} for h in hospitals]
+        ranked = route.osrm_routes(lat, lon, destinations)
+        for r in ranked["results"]:
+            if "error" in r:
+                print(f"    - {r['label']:30s}  ERREUR ({r['error']})")
+            else:
+                print(f"    - {r['label']:30s}  {r['distance_m']:>7.0f} m  /  {r['duration_human']}")
+    else:
+        print("    Aucun hôpital dans le rayon analysé.")
 
     # Synthèse
     _print_section("SYNTHÈSE")
