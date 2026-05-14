@@ -13,18 +13,36 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
 
 BAN_BASE_URL = "https://api-adresse.data.gouv.fr"
-TIMEOUT_S = 10
+TIMEOUT_S = 20
 
 
-def _http_get_json(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": "plugin-urgence-fr/0.1"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+def _http_get_json(url: str, retries: int = 2) -> dict:
+    """GET JSON avec retry exponentiel sur timeout, 5xx et 429."""
+    last_err: Exception | None = None
+    for attempt in range(retries + 1):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "plugin-urgence-fr/0.3"})
+            with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            last_err = e
+            if e.code in (429, 502, 503, 504) and attempt < retries:
+                time.sleep(2 ** attempt)
+                continue
+            raise
+        except (urllib.error.URLError, TimeoutError) as e:
+            last_err = e
+            if attempt < retries:
+                time.sleep(1.5 ** attempt)
+                continue
+            raise
+    raise last_err if last_err else RuntimeError("retries exhausted")
 
 
 def _format_feature(feature: dict) -> dict:

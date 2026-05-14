@@ -15,8 +15,9 @@ Lance une analyse multi-source en orchestrant les skills du plugin `plugin-urgen
    - Si le score de géocodage est inférieur à 0,5, signale l'ambiguïté à l'utilisateur avant de continuer.
 
 2. **Identifier les ressources et risques opérationnels** :
-   - `fr-locate-infra` (rayon 2000 m, types `health,emergency,shelter`) — hôpitaux, secours, lieux de repli.
+   - `fr-locate-infra` (rayon **1500 m**, types `health,emergency` — n'inclus PAS `shelter` qui surcharge Overpass) — hôpitaux, secours.
    - `fr-water-access` (`all` avec `citycode`) — points d'eau, qualité eau potable.
+   - Note : sur Mac/Linux, si `python` n'est pas trouvé, retente immédiatement avec `python3` (les scripts sont compatibles avec les deux).
 
 3. **Caractériser le territoire** :
    - `fr-characterize-zone` (mode `full`) — population, densité, EHPAD, crèches, écoles, score de vulnérabilité.
@@ -47,4 +48,4 @@ Produis une synthèse structurée en français comprenant :
 - **Recommandations** : 3 à 5 actions prioritaires en fonction du contexte (publics vulnérables à informer, voies à privilégier, alertes officielles à consulter).
 - **Rapport visuel** : indique le chemin vers `report.html` et la commande pour l'ouvrir.
 
-Si un skill renvoie une erreur, continue avec les autres et indique-le dans la synthèse. Cite les sources (BAN, OSM, Hub'Eau, Géorisques, Open-Meteo, OSRM) pour la transparence.
+Si un skill renvoie une erreur (timeout, rate-limit), continue avec les autres et indique-le dans la synthèse. Tous les scripts ont du retry interne (3 tentatives, backoff exponentiel), mais une coupure réseau persistante peut quand même faire échouer un skill — c'est attendu et géré gracieusement. Cite les sources (BAN, OSM, Hub'Eau, Géorisques, Open-Meteo, OSRM, Sentiweb) pour la transparence.
