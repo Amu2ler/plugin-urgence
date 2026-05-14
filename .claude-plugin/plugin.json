@@ -1,10 +1,12 @@
 {
   "name": "plugin-urgence-fr",
-  "version": "0.2.0",
-  "description": "Plugin Claude Code d'aide à la décision en situation d'urgence en France : localisation, caractérisation de zones, alertes sanitaires, météo, hydrologie et risques majeurs. 9 skills, 1 slash command /urgence, 1 sub-agent urgentiste.",
-  "author": {
-    "name": "Arthur Muller"
-  },
+  "version": "0.3.0",
+  "description": "Plugin Claude Code d'aide à la décision en situation d'urgence en France : localisation, caractérisation de zones, risques majeurs, alertes sanitaires, météo, hydrologie, épidémiologie et itinéraires. 10 skills, 1 slash command /urgence, 1 sub-agent urgentiste, générateur de rapport HTML.",
+  "authors": [
+    { "name": "Arthur Muller" },
+    { "name": "Kylian Strub" },
+    { "name": "Abdoulaye Diallo" }
+  ],
   "homepage": "https://github.com/Amu2ler/plugin-urgence",
   "license": "MIT",
   "keywords": [
@@ -18,6 +20,8 @@
     "insee",
     "georisques",
     "vigicrues",
+    "sentinelles",
+    "epidemiology",
     "routing"
   ]
 }

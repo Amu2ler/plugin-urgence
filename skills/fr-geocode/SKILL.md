@@ -1,6 +1,7 @@
 ---
 name: fr-geocode
-description: Géocode une adresse française (texte → lat/lon, commune, code INSEE) ou fait l'inverse (lat/lon → adresse). Utilise la Base Adresse Nationale (BAN). À DÉCLENCHER quand l'utilisateur fournit une adresse, un lieu nommé en France, ou des coordonnées GPS dont il faut récupérer l'adresse ou le code commune.
+description: Géocode une adresse française (texte → lat/lon, commune, code INSEE) ou fait l'inverse (lat/lon → adresse) via la Base Adresse Nationale (BAN). Trigger when user asks "où se trouve [adresse]", "code INSEE de [lieu]", "à quelle commune correspondent ces coordonnées", "geocode", "reverse geocode", ou cite une adresse ou des coordonnées GPS en France. Mots-clés : adresse, BAN, INSEE, citycode, géocodage, geocode, coordonnées GPS, latitude longitude.
+allowed-tools: Bash(python *), Bash(python3 *)
 ---
 
 # fr-geocode — Géocodage France (BAN)

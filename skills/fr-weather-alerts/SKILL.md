@@ -1,6 +1,7 @@
 ---
 name: fr-weather-alerts
-description: Récupère les prévisions météo et calcule un niveau d'alerte (vert/jaune/orange/rouge) pour un point en France à partir d'Open-Meteo (vent, pluie, neige, températures extrêmes). Renvoie aussi le lien vers la carte officielle Vigilance Météo-France. À DÉCLENCHER en cas de tempête, canicule, vague de froid, fortes pluies, ou pour planifier une opération sensible aux conditions météo.
+description: Récupère les prévisions météo et calcule un niveau d'alerte (vert/jaune/orange/rouge) pour un point en France via Open-Meteo, avec seuils inspirés Vigilance Météo-France (vent, pluie, neige, chaud, froid). Renvoie le lien vers vigilance.meteofrance.fr. Trigger when user asks "quel temps à [lieu]", "alerte tempête", "canicule", "vague de froid", "fortes pluies", "rafales", "vigilance météo", "prévisions". Mots-clés : météo, Open-Meteo, Météo-France, vigilance, tempête, canicule, weather alert, forecast.
+allowed-tools: Bash(python *), Bash(python3 *)
 ---
 
 # fr-weather-alerts — Alertes météo (Open-Meteo + Vigilance)

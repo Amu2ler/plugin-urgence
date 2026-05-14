@@ -2,15 +2,18 @@
 
 **Plugin Claude Code d'aide à la décision en situation d'urgence en France.**
 
+> Projet de groupe — IUT NFC, UMLP, 3ᵉ année (S6) — encadré par Christophe Guyeux.
+> Auteurs : **Arthur Muller**, **Kylian Strub**, **Abdoulaye Diallo**.
+
 Trois axes opérationnels :
 
 1. **Localiser** un site, des routes, des accès à l'eau, des bâtiments.
-2. **Caractériser** une zone (population, vulnérabilités, équipements sensibles, profil de risque historique).
-3. **Surveiller** l'état d'alerte sanitaire, hydrologique, météorologique en temps réel.
+2. **Caractériser** une zone (population, vulnérabilités, profil de risque historique).
+3. **Surveiller** les alertes sanitaires, hydrologiques, météorologiques et épidémiologiques en temps réel.
 
-Le plugin fournit **9 skills**, **1 slash command** `/urgence`, **1 sub-agent** `urgentiste`, et un **générateur de rapport HTML interactif** (carte Leaflet).
+Le plugin fournit **10 skills**, **1 slash command** `/urgence`, **1 sub-agent** `urgentiste`, un **script de démo console** et un **générateur de rapport HTML interactif** (carte Leaflet).
 
-## Skills
+## Skills (10)
 
 | Skill | Rôle | Sources |
 |---|---|---|
@@ -22,14 +25,25 @@ Le plugin fournit **9 skills**, **1 slash command** `/urgence`, **1 sub-agent** 
 | [`fr-weather-alerts`](skills/fr-weather-alerts/SKILL.md) | Prévisions + niveau d'alerte vent/pluie/neige/chaud/froid | [Open-Meteo](https://open-meteo.com) + [Vigilance MF](https://vigilance.meteofrance.fr) |
 | [`fr-health-alerts`](skills/fr-health-alerts/SKILL.md) | AQI européen, polluants, 6 pollens | [Open-Meteo Air Quality](https://open-meteo.com/en/docs/air-quality-api) |
 | [`fr-vigicrues`](skills/fr-vigicrues/SKILL.md) | Niveaux d'eau temps réel + tendance 24 h | [Hub'Eau Hydrométrie](https://hubeau.eaufrance.fr) |
+| [`fr-sentinelles`](skills/fr-sentinelles/SKILL.md) | Épidémiologie ville (grippe, gastro, varicelle) | [Réseau Sentinelles / Inserm](https://www.sentiweb.fr/) |
 | [`fr-route`](skills/fr-route/SKILL.md) | Itinéraires routiers, classement de destinations | [OSRM](https://project-osrm.org/) |
 
-Toutes les sources sont **publiques et gratuites**, sans clé API requise. Zéro dépendance Python (stdlib uniquement).
+Toutes les sources sont **publiques et gratuites**, sans clé API. **Zéro dépendance Python** (stdlib uniquement).
 
-## Slash command et agent
+## Slash command et sub-agent
 
-- **`/urgence <adresse>`** ([commands/urgence.md](commands/urgence.md)) — lance l'analyse d'urgence complète via l'orchestration des 9 skills.
-- **Agent `urgentiste`** ([agents/urgentiste.md](agents/urgentiste.md)) — sub-agent dédié, sait quand chaîner les skills, produit des synthèses opérationnelles structurées et sourcées.
+- **`/urgence <adresse>`** ([commands/urgence.md](commands/urgence.md)) — orchestre les 10 skills sur une adresse.
+- **Sub-agent `urgentiste`** ([agents/urgentiste.md](agents/urgentiste.md)) — sait quand chaîner les skills, produit des synthèses opérationnelles structurées et sourcées.
+
+## Conformité avec la méthodologie du cours
+
+Le plugin respecte les bonnes pratiques exposées dans le brief `ProjetsSkills.pdf` :
+
+- **Choix skills plutôt que MCPs** pour minimiser l'empreinte tokens en idle (~50 tokens par skill inactif).
+- **Frontmatter** : chaque `SKILL.md` déclare `name`, `description` (Trigger when... + mots-clés FR/EN) et `allowed-tools` (défense en profondeur — `Bash(python *)` uniquement).
+- **`references/`** : le skill `fr-georisques` démontre le levier "details à la demande" en externalisant `api.md`, `codes_gaspar.md`, `interpretation.md`, `output_format.md` chargés seulement quand l'agent en a besoin.
+- **Logique en script CLI Python testable seul** : chaque `*.py` peut être lancé sans Claude.
+- **Empreinte minimale** : pas de dépendance externe, scripts < 250 lignes, sorties JSON compactes.
 
 ## Installation dans Claude Code
 
@@ -37,23 +51,23 @@ Toutes les sources sont **publiques et gratuites**, sans clé API requise. Zéro
 git clone https://github.com/Amu2ler/plugin-urgence.git
 ```
 
-Puis dans Claude Code : `/plugin` → ajouter le chemin local, ou éditer `~/.claude/settings.json`. Voir la [doc plugins](https://docs.claude.com/en/docs/claude-code/plugins).
+Puis dans Claude Code : `/plugin` → ajouter le chemin local. Voir la [doc plugins](https://docs.claude.com/en/docs/claude-code/plugins).
 
 ## Prérequis
 
 - **Python 3.10+** (stdlib uniquement, pas de `pip install`).
+- Voir [`requirements.txt`](requirements.txt) et [`pyproject.toml`](pyproject.toml) pour les dépendances **optionnelles** (`pypdf`, `pyproj`, `pynsee`...).
 - Connexion HTTPS vers les APIs publiques :
   - `api-adresse.data.gouv.fr` (BAN)
   - `overpass-api.de` (+ miroirs `kumi.systems`, `openstreetmap.fr`)
   - `geo.api.gouv.fr`
   - `hubeau.eaufrance.fr`
   - `www.georisques.gouv.fr`
+  - `www.sentiweb.fr`
   - `api.open-meteo.com` + `air-quality-api.open-meteo.com`
   - `router.project-osrm.org`
 
-## Démo en ligne de commande
-
-Le script `demo.py` orchestre les 9 skills et affiche une synthèse décisionnelle :
+## Démo console
 
 ```bash
 python demo.py                                     # Nantes par défaut
@@ -62,37 +76,23 @@ python demo.py --address "1 rue de Rivoli, 75001 Paris"
 
 ## Rapport HTML interactif
 
-Le script `report.py` génère un **rapport HTML autonome** avec carte Leaflet :
-
 ```bash
 python report.py                                   # produit report.html
-python report.py --address "10 cours Charlemagne, 69002 Lyon" --output rapport-lyon.html
+python report.py --address "..." --output rapport.html
 ```
 
-Ouvre le fichier dans un navigateur — la carte affiche les hôpitaux, casernes, EHPAD, points d'eau et les **3 itinéraires** vers les hôpitaux les plus proches. Pas de serveur à lancer, pas de build.
+Ouvre le fichier dans un navigateur. La carte Leaflet affiche les hôpitaux, casernes, EHPAD, points d'eau, stations Vigicrues colorées selon la tendance, et les **3 itinéraires OSRM** vers les hôpitaux les plus rapides.
 
 ## Exemples d'utilisation CLI direct
 
 ```bash
-# Géocoder
 python skills/fr-geocode/geocode.py forward "29 rue de Strasbourg, 44000 Nantes"
-
-# Infrastructures
 python skills/fr-locate-infra/locate_infra.py 47.218 -1.553 --radius 2000 --types health,emergency
-
-# Risques majeurs
 python skills/fr-georisques/georisques.py 44109
-
-# Niveaux d'eau temps réel
 python skills/fr-vigicrues/vigicrues.py 47.218 -1.553 --radius-km 15
-
-# Alertes météo
+python skills/fr-sentinelles/sentinelles.py national
 python skills/fr-weather-alerts/weather_alerts.py 47.218 -1.553 --days 3
-
-# Qualité air et pollens
 python skills/fr-health-alerts/health_alerts.py 47.218 -1.553
-
-# Comparer destinations par temps de trajet
 python skills/fr-route/route.py routes 47.2187 -1.5537 \
   "47.2104,-1.5534,Hotel Dieu" "47.2272,-1.5615,Clinique du Parc"
 ```
@@ -111,7 +111,8 @@ L'agent enchaîne :
 6. `fr-health-alerts` → AQI 38 (green), graminées 9.6 (yellow)
 7. `fr-georisques` → 22 risques recensés, 17 CatNat historiques, radon classe 3
 8. `fr-vigicrues` → la Loire à Sainte-Luce à 3.47 m, **en hausse de +50 cm sur 24 h**
-9. `fr-route` → Hôtel Dieu accessible en 4 min, Le Tourville en 4 min
+9. `fr-sentinelles` → grippe + gastro + varicelle au niveau national (green)
+10. `fr-route` → Hôtel Dieu accessible en 4 min, Le Tourville en 4 min
 
 L'agent synthétise et recommande (mise en alerte des EHPAD à proximité, surveillance du niveau de la Loire, orientation des secours vers l'Hôtel Dieu).
 
@@ -120,25 +121,42 @@ L'agent synthétise et recommande (mise en alerte des EHPAD à proximité, surve
 ```
 plugin-urgence-fr/
 ├── .claude-plugin/
-│   └── plugin.json              # Manifest
+│   └── plugin.json
 ├── commands/
-│   └── urgence.md               # Slash command /urgence
+│   └── urgence.md
 ├── agents/
-│   └── urgentiste.md            # Sub-agent
-├── skills/                      # 9 skills, chacun autonome
+│   └── urgentiste.md
+├── skills/                          # 10 skills, chacun autonome
 │   ├── fr-geocode/
 │   ├── fr-locate-infra/
 │   ├── fr-water-access/
 │   ├── fr-characterize-zone/
 │   ├── fr-georisques/
+│   │   ├── SKILL.md
+│   │   ├── georisques.py
+│   │   └── references/              # progressive disclosure
+│   │       ├── api.md
+│   │       ├── codes_gaspar.md
+│   │       ├── interpretation.md
+│   │       └── output_format.md
 │   ├── fr-weather-alerts/
 │   ├── fr-health-alerts/
 │   ├── fr-vigicrues/
+│   ├── fr-sentinelles/
 │   └── fr-route/
-├── demo.py                      # Démo console (9 skills enchaînés)
-├── report.py                    # Génère report.html (carte + KPIs)
+├── demo.py                          # Démo console (10 skills enchaînés)
+├── report.py                        # Génère report.html (carte + KPIs)
+├── requirements.txt
+├── pyproject.toml
 └── README.md
 ```
+
+## Livrable et rendu
+
+Conformément au brief :
+- Dépôt GitHub public : <https://github.com/Amu2ler/plugin-urgence>
+- Groupe : Arthur Muller, Kylian Strub, Abdoulaye Diallo
+- Échéance : **vendredi 12 juin 2026**, fin de journée
 
 ## Licence
 

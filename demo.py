@@ -1,4 +1,4 @@
-"""Script de démo : orchestration des 9 skills du plugin sur un scénario d'urgence.
+"""Script de démo : orchestration des 10 skills du plugin sur un scénario d'urgence.
 
 Scénario : "Incendie signalé au 29 rue de Strasbourg, 44000 Nantes."
 L'agent doit construire un contexte décisionnel complet.
@@ -54,7 +54,7 @@ def _short_json(obj, max_keys: int = 5) -> str:
 def run_scenario(address: str) -> None:
     print(f"\nScénario : situation d'urgence à l'adresse")
     print(f"  >>> {address}")
-    print("\nL'agent enchaîne les 9 skills du plugin pour construire le contexte.")
+    print("\nL'agent enchaîne les 10 skills du plugin pour construire le contexte.")
 
     # 1. Géocodage
     _print_section("1. fr-geocode — Localiser l'adresse")
@@ -166,8 +166,24 @@ def run_scenario(address: str) -> None:
         else:
             print("    Aucune station de mesure dans le rayon analysé.")
 
-    # 9. Itinéraires vers les 3 hôpitaux les plus proches
-    _print_section("9. fr-route — Itinéraires vers les 3 hôpitaux les plus proches")
+    # 9. Surveillance épidémiologique (Sentinelles)
+    _print_section("9. fr-sentinelles — Surveillance épidémiologique nationale")
+    sentinelles = _load_module("fr-sentinelles", "sentinelles.py")
+    epidemio = _safe("fr-sentinelles", sentinelles.build_report, "national", None, ["1", "3", "7"])
+    if epidemio:
+        if epidemio.get("week_iso"):
+            print(f"  Semaine ISO : {epidemio['week_iso']}")
+        for ind in epidemio.get("indicators", []):
+            if "error" in ind:
+                print(f"    - {ind.get('label', '—'):28s}  ERREUR ({ind['error']})")
+                continue
+            inc100 = ind.get("inc100")
+            inc100_s = f"{inc100} /100k" if inc100 is not None else "—"
+            print(f"    - {ind.get('label', '—'):28s}  {inc100_s:>12s}  niveau: {ind.get('level', '—')}")
+        print(f"  NIVEAU GLOBAL : {epidemio.get('overall_level', '—').upper()}")
+
+    # 10. Itinéraires vers les 3 hôpitaux les plus proches
+    _print_section("10. fr-route — Itinéraires vers les 3 hôpitaux les plus proches")
     route = _load_module("fr-route", "route.py")
     hospitals = [x for x in (infra or {}).get("results", {}).get("health", []) if x["kind"] == "hospital"][:3]
     if hospitals:
@@ -206,6 +222,8 @@ def run_scenario(address: str) -> None:
             print(f"  Hydrologie      : ⚠ {rising} station(s) en hausse sur 24 h")
         else:
             print(f"  Hydrologie      : {len(crues['stations'])} station(s) suivies, pas de hausse")
+    if epidemio:
+        print(f"  Épidémiologie   : {epidemio.get('overall_level', '—')}")
     print()
 
 

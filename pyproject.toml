@@ -1,0 +1,54 @@
+[project]
+name = "plugin-urgence-fr"
+version = "0.2.0"
+description = "Plugin Claude Code d'aide à la décision en situation d'urgence en France."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Arthur Muller" },
+    { name = "Kylian Strub" },
+    { name = "Abdoulaye Diallo" },
+]
+keywords = [
+    "claude-code",
+    "plugin",
+    "skills",
+    "emergency",
+    "urgence",
+    "france",
+    "georisques",
+    "hubeau",
+    "vigicrues",
+    "openstreetmap",
+    "insee",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Public Sector",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+# Pas de dépendance runtime : stdlib uniquement (urllib, json, argparse, math, importlib).
+dependencies = []
+
+[project.optional-dependencies]
+pdf = ["pypdf>=4.0", "pdfplumber>=0.10"]
+geo = ["pyproj>=3.6", "shapely>=2.0", "owslib>=0.30"]
+insee = ["pynsee>=0.1"]
+all = [
+    "pypdf>=4.0",
+    "pdfplumber>=0.10",
+    "pyproj>=3.6",
+    "shapely>=2.0",
+    "owslib>=0.30",
+    "pynsee>=0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/Amu2ler/plugin-urgence"
+Repository = "https://github.com/Amu2ler/plugin-urgence"
+Issues = "https://github.com/Amu2ler/plugin-urgence/issues"

@@ -1,0 +1,15 @@
+# plugin-urgence-fr
+#
+# Aucune dépendance runtime requise : tous les skills utilisent uniquement la
+# bibliothèque standard Python (urllib, json, argparse, math, importlib, html).
+# C'est un choix d'architecture pour rendre le plugin installable sans `pip install`
+# et limiter la surface d'attaque (cf. ProjetsSkills.pdf p.40, défense en profondeur).
+#
+# Dépendances optionnelles si on enrichit le plugin :
+#   pypdf>=4.0          # extraction PDF pour ingest de documents officiels
+#   pdfplumber>=0.10    # parsing tabulaire PDF
+#   rank-bm25>=0.2      # recherche textuelle dans un corpus de références
+#   pyproj>=3.6         # reprojections IGN Lambert93 -> WGS84
+#   shapely>=2.0        # géométries (intersections de zones)
+#   owslib>=0.30        # client WFS/WMS Géoplateforme IGN
+#   pynsee>=0.1         # client API INSEE (BPE, Filosofi, RP)

@@ -26,6 +26,7 @@ Lance une analyse multi-source en orchestrant les skills du plugin `plugin-urgen
    - `fr-weather-alerts` (3 jours) — vent, pluie, neige, chaud, froid.
    - `fr-health-alerts` — qualité de l'air et pollens.
    - `fr-vigicrues` (rayon 15 km) — niveaux des cours d'eau et tendance 24h.
+   - `fr-sentinelles` — incidence grippe, gastro, varicelle (national, ou régional si tu connais le code région).
 
 5. **Planifier l'évacuation / l'accès** :
    - `fr-route` (mode `routes`) — classer les 3 hôpitaux les plus proches par temps de trajet.

@@ -1,6 +1,7 @@
 ---
 name: fr-health-alerts
-description: Évalue les risques sanitaires immédiats pour un point en France — qualité de l'air (PM2.5, PM10, NO2, O3, SO2, indice européen AQI), pollens (graminées, bouleau, ambroisie…). Renvoie des liens vers Santé Publique France et Atmo France pour le contexte épidémiologique. À DÉCLENCHER pour évaluer une exposition (pollution, pic de pollen, smog), recommander des consignes aux publics fragiles, ou compléter une analyse d'urgence.
+description: Évalue les risques sanitaires environnementaux pour un point en France via Open-Meteo Air Quality — indice européen AQI, PM2.5, PM10, NO2, O3, SO2, CO, 6 pollens (graminées, bouleau, aulne, olivier, armoise, ambroisie). Trigger when user asks "qualité de l'air", "pollution à [lieu]", "pic de pollen", "smog", "PM2.5", "AQI", "alerte sanitaire", "consignes asthme/BPCO". Mots-clés : AQI, qualité air, pollution, Atmo, Géod'air, Santé Publique France, pollen, PM2.5, PM10, ozone, air quality.
+allowed-tools: Bash(python *), Bash(python3 *)
 ---
 
 # fr-health-alerts — Alertes sanitaires (air + pollens)

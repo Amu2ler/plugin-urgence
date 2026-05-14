@@ -19,6 +19,9 @@ desktop.ini
 *.swp
 *.swo
 
+# Claude Code session local
+.claude/settings.local.json
+
 # Secrets / env
 .env
 .env.local
@@ -34,5 +37,8 @@ tmp/
 report.html
 *.report.html
 
-# PDFs du sujet (sources locales)
+# PDFs du sujet (sources locales) et extractions
 *.pdf
+ClaudeCode.txt
+ProjetsSkills.txt
+AgentsLangchain.txt

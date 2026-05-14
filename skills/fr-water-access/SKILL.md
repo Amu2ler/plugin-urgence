@@ -1,6 +1,7 @@
 ---
 name: fr-water-access
-description: Trouve les ressources en eau autour d'un point en France — fontaines à eau potable, châteaux d'eau, rivières, lacs (OpenStreetMap) — et la qualité de l'eau potable de la commune (Hub'Eau). À DÉCLENCHER en cas de coupure d'eau, contamination supposée, recherche de points d'approvisionnement, ou évaluation de la qualité de l'eau locale.
+description: Trouve les ressources en eau autour d'un point en France — fontaines, châteaux d'eau, rivières, lacs (OpenStreetMap) — et la qualité de l'eau potable distribuée par commune (Hub'Eau qualité_eau_potable). Trigger when user asks "où trouver de l'eau potable", "points d'eau près de", "l'eau est-elle potable à [commune]", "qualité de l'eau", "fontaines", "rivières autour de", "coupure d'eau". Mots-clés : eau, eau potable, Hub'Eau, fontaine, château d'eau, rivière, qualité eau, ARS, drinking water.
+allowed-tools: Bash(python *), Bash(python3 *)
 ---
 
 # fr-water-access — Accès à l'eau (OSM + Hub'Eau)
