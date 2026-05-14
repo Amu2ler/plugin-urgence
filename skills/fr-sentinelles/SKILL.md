@@ -1,6 +1,6 @@
 ---
 name: fr-sentinelles
-description: Récupère les indicateurs d'épidémiologie de ville en temps réel via le Réseau Sentinelles (Sentiweb / Inserm-Sorbonne) — syndromes grippaux, diarrhée aiguë, varicelle, etc. — au niveau national ou régional, avec niveau d'alerte (épidémie/pré-épidémie/normal). Trigger when user asks "épidémie en cours", "grippe à [lieu]", "gastro", "varicelle", "Sentinelles", "incidence", "épidémiologie ville". Mots-clés : Sentinelles, Sentiweb, Inserm, épidémio, grippe, gastro, IRA, varicelle, incidence, épidémie.
+description: Récupère les indicateurs d'épidémiologie de ville en temps réel via le Réseau Sentinelles (Sentiweb / Inserm-Sorbonne) — syndromes grippaux, diarrhée aiguë, varicelle, etc. — au niveau national ou régional, avec niveau d'alerte (épidémie/pré-épidémie/normal). Trigger when user asks "épidémie en cours", "grippe à [lieu]", "gastro", "varicelle", "Sentinelles", "incidence", "épidémiologie ville". Mots-clés - Sentinelles, Sentiweb, Inserm, épidémio, grippe, gastro, IRA, varicelle, incidence, épidémie.
 allowed-tools: Bash(python *), Bash(python3 *)
 ---
 

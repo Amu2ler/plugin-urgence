@@ -1,6 +1,6 @@
 ---
 name: fr-vigicrues
-description: Donne les niveaux d'eau des cours d'eau (rivières, fleuves) en temps réel autour d'un point en France via Hub'Eau Hydrométrie, avec tendance sur 24 h (rising/falling/stable). Renvoie aussi le lien vers vigicrues.gouv.fr. Trigger when user asks "niveau de [rivière/fleuve]", "risque de crue", "débordement", "hydrologie", "Vigicrues", "la Loire monte", "inondation imminente". Mots-clés : Vigicrues, Hub'Eau, hydrométrie, crue, niveau d'eau, rivière, fleuve, inondation, flood.
+description: Donne les niveaux d'eau des cours d'eau (rivières, fleuves) en temps réel autour d'un point en France via Hub'Eau Hydrométrie, avec tendance sur 24 h (rising/falling/stable). Renvoie aussi le lien vers vigicrues.gouv.fr. Trigger when user asks "niveau de [rivière/fleuve]", "risque de crue", "débordement", "hydrologie", "Vigicrues", "la Loire monte", "inondation imminente". Mots-clés - Vigicrues, Hub'Eau, hydrométrie, crue, niveau d'eau, rivière, fleuve, inondation, flood.
 allowed-tools: Bash(python *), Bash(python3 *)
 ---
 

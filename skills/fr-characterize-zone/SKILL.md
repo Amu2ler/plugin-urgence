@@ -1,6 +1,6 @@
 ---
 name: fr-characterize-zone
-description: Caractérise une zone en France — population, superficie, densité (geo.api.gouv.fr / INSEE) et équipements sensibles à proximité (EHPAD, crèches, écoles, hôpitaux) via OpenStreetMap. Calcule un score de vulnérabilité pondéré. Trigger when user asks "combien d'habitants à [commune]", "population de", "publics vulnérables dans [zone]", "EHPAD près de", "personnes à évacuer", "densité", "caractériser une zone". Mots-clés : INSEE, population, densité, EHPAD, crèche, école, vulnérabilité, démographie.
+description: Caractérise une zone en France — population, superficie, densité (geo.api.gouv.fr / INSEE) et équipements sensibles à proximité (EHPAD, crèches, écoles, hôpitaux) via OpenStreetMap. Calcule un score de vulnérabilité pondéré. Trigger when user asks "combien d'habitants à [commune]", "population de", "publics vulnérables dans [zone]", "EHPAD près de", "personnes à évacuer", "densité", "caractériser une zone". Mots-clés - INSEE, population, densité, EHPAD, crèche, école, vulnérabilité, démographie.
 allowed-tools: Bash(python *), Bash(python3 *)
 ---
 

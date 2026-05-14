@@ -1,6 +1,6 @@
 ---
 name: fr-locate-infra
-description: Localise les infrastructures critiques (hôpitaux, cliniques, pharmacies, écoles, casernes de pompiers, police, gendarmeries, gares, aérodromes, axes routiers) autour d'un point en France via OpenStreetMap / Overpass. Trigger when user asks "qu'est-ce qu'il y a autour de", "hôpitaux les plus proches", "casernes proches", "axes routiers près de", "planifier une évacuation", "infrastructures proches de [lieu]". Mots-clés : OSM, Overpass, hôpital, pompiers, police, école, infrastructure, équipement, autour de, à proximité.
+description: Localise les infrastructures critiques (hôpitaux, cliniques, pharmacies, écoles, casernes de pompiers, police, gendarmeries, gares, aérodromes, axes routiers) autour d'un point en France via OpenStreetMap / Overpass. Trigger when user asks "qu'est-ce qu'il y a autour de", "hôpitaux les plus proches", "casernes proches", "axes routiers près de", "planifier une évacuation", "infrastructures proches de [lieu]". Mots-clés - OSM, Overpass, hôpital, pompiers, police, école, infrastructure, équipement, autour de, à proximité.
 allowed-tools: Bash(python *), Bash(python3 *)
 ---
 

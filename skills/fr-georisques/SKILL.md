@@ -1,6 +1,6 @@
 ---
 name: fr-georisques
-description: Agrège les risques majeurs d'une commune française via l'API Géorisques (BRGM) — inondations, mouvements de terrain, séismes, sites industriels classés ICPE/Seveso, arrêtés de catastrophe naturelle CatNat, potentiel radon, DICRIM. Trigger when user asks "quels risques à [commune]", "y a-t-il des sites Seveso", "ICPE près de", "catastrophes naturelles historiques", "risques majeurs", "exposition radon", "DICRIM". Mots-clés : Géorisques, BRGM, ICPE, Seveso, CatNat, radon, DICRIM, risque majeur, inondation, séisme.
+description: Agrège les risques majeurs d'une commune française via l'API Géorisques (BRGM) — inondations, mouvements de terrain, séismes, sites industriels classés ICPE/Seveso, arrêtés de catastrophe naturelle CatNat, potentiel radon, DICRIM. Trigger when user asks "quels risques à [commune]", "y a-t-il des sites Seveso", "ICPE près de", "catastrophes naturelles historiques", "risques majeurs", "exposition radon", "DICRIM". Mots-clés - Géorisques, BRGM, ICPE, Seveso, CatNat, radon, DICRIM, risque majeur, inondation, séisme.
 allowed-tools: Bash(python *), Bash(python3 *)
 ---
 

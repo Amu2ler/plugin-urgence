@@ -1,6 +1,6 @@
 ---
 name: fr-route
-description: Calcule des itinéraires routiers (distance, durée, géométrie) entre deux points ou classe plusieurs destinations par temps de trajet en France via OSRM. Trigger when user asks "comment aller de A à B", "combien de temps pour aller à", "hôpital le plus rapide à atteindre", "trajet d'évacuation", "comparer les routes", "tournée de [sites]". Mots-clés : OSRM, itinéraire, route, trajet, évacuation, routing, time to reach, distance.
+description: Calcule des itinéraires routiers (distance, durée, géométrie) entre deux points ou classe plusieurs destinations par temps de trajet en France via OSRM. Trigger when user asks "comment aller de A à B", "combien de temps pour aller à", "hôpital le plus rapide à atteindre", "trajet d'évacuation", "comparer les routes", "tournée de [sites]". Mots-clés - OSRM, itinéraire, route, trajet, évacuation, routing, time to reach, distance.
 allowed-tools: Bash(python *), Bash(python3 *)
 ---
 
