@@ -45,13 +45,45 @@ Le plugin respecte les bonnes pratiques exposées dans le brief `ProjetsSkills.p
 - **Logique en script CLI Python testable seul** : chaque `*.py` peut être lancé sans Claude.
 - **Empreinte minimale** : pas de dépendance externe, scripts < 250 lignes, sorties JSON compactes.
 
-## Installation dans Claude Code
+## Installation rapide (one-shot)
+
+Deux scripts d'amorçage sont fournis pour installer **automatiquement les prérequis** (Python 3.10+, Git, Claude Code CLI) si tu n'as rien.
+
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/Amu2ler/plugin-urgence.git
+cd plugin-urgence
+.\setup.ps1
+```
+
+Si la politique d'exécution PowerShell bloque, utilise :
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+### macOS / Linux
 
 ```bash
 git clone https://github.com/Amu2ler/plugin-urgence.git
+cd plugin-urgence
+chmod +x setup.sh
+./setup.sh
 ```
 
-Puis dans Claude Code : `/plugin` → ajouter le chemin local. Voir la [doc plugins](https://docs.claude.com/en/docs/claude-code/plugins).
+Le script détecte ce qui est déjà installé, propose d'installer ce qui manque (via `winget` sur Windows, `brew`/`apt`/`dnf`/`pacman` sur Unix), puis affiche les 3 commandes à taper dans Claude Code pour activer le plugin.
+
+## Installation manuelle dans Claude Code
+
+Si tu as déjà Python 3.10+ et Claude Code, tu peux sauter les scripts et aller directement dans Claude Code :
+
+```
+/plugin marketplace add <chemin_absolu>/.claude-plugin/marketplace.json
+/plugin install plugin-urgence-fr@local-marketplace
+/reload-plugins
+```
+
+Voir la [doc plugins](https://docs.claude.com/en/docs/claude-code/plugins) pour plus de détails.
 
 ## Prérequis
 
