@@ -31,6 +31,11 @@ Lance une analyse multi-source en orchestrant les skills du plugin `plugin-urgen
 5. **Planifier l'évacuation / l'accès** :
    - `fr-route` (mode `routes`) — classer les 3 hôpitaux les plus proches par temps de trajet.
 
+6. **Générer le rapport HTML interactif** (carte Leaflet + KPIs visuels) :
+   - Exécute en arrière-plan : `python report.py --address "<adresse_originale_fournie_par_l_utilisateur>" --output report.html`
+   - Une fois le script terminé, donne à l'utilisateur le **chemin absolu** du fichier `report.html` produit et propose-lui de l'ouvrir dans un navigateur (sur Windows : `ii report.html` ou `start report.html` ; sur macOS : `open report.html` ; sur Linux : `xdg-open report.html`).
+   - Le rapport HTML est complémentaire de la synthèse texte : la synthèse résume oralement, le rapport visualise géographiquement (hôpitaux, EHPAD, points d'eau, itinéraires colorés, stations Vigicrues).
+
 ## Synthèse attendue
 
 Produis une synthèse structurée en français comprenant :
@@ -40,5 +45,6 @@ Produis une synthèse structurée en français comprenant :
 - **Situation actuelle** : niveau d'alerte météo / sanitaire / hydrologique (vert/jaune/orange/rouge).
 - **Ressources accessibles** : 3 hôpitaux les plus proches avec temps de trajet, caserne(s) de pompiers, points d'eau.
 - **Recommandations** : 3 à 5 actions prioritaires en fonction du contexte (publics vulnérables à informer, voies à privilégier, alertes officielles à consulter).
+- **Rapport visuel** : indique le chemin vers `report.html` et la commande pour l'ouvrir.
 
 Si un skill renvoie une erreur, continue avec les autres et indique-le dans la synthèse. Cite les sources (BAN, OSM, Hub'Eau, Géorisques, Open-Meteo, OSRM) pour la transparence.
