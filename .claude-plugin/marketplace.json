@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "plugin-urgence-fr",
-      "source": "../",
+      "source": "./",
       "description": "Plugin Claude Code d'aide à la décision en situation d'urgence en France (10 skills, 1 slash command /urgence, 1 sub-agent urgentiste)."
     }
   ]
